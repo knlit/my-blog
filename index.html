@@ -22,6 +22,23 @@
       </nav>
     </header>
 
+    <section class="music-player" id="player" aria-label="像素播放器">
+      <div class="track-screen">
+        <span class="track-label">NOW PLAYING</span>
+        <strong id="trackName">8-bit midnight loop</strong>
+        <span id="playerStatus">READY</span>
+      </div>
+      <div class="player-controls">
+        <button class="player-button" type="button" data-action="prev" aria-label="上一首">◂◂</button>
+        <button class="player-button is-primary" type="button" data-action="toggle" aria-label="播放或暂停">▶</button>
+        <button class="player-button" type="button" data-action="next" aria-label="下一首">▸▸</button>
+      </div>
+      <label class="volume-control">
+        <span>VOL</span>
+        <input id="volumeControl" type="range" min="0" max="100" value="42" />
+      </label>
+    </section>
+
     <main id="top">
       <section class="hero">
         <div class="hero-copy">
@@ -119,23 +136,6 @@
         </form>
       </section>
     </main>
-
-    <section class="music-player" id="player" aria-label="像素播放器">
-      <div class="track-screen">
-        <span class="track-label">NOW PLAYING</span>
-        <strong id="trackName">8-bit midnight loop</strong>
-        <span id="playerStatus">READY</span>
-      </div>
-      <div class="player-controls">
-        <button class="player-button" type="button" data-action="prev" aria-label="上一首">◂◂</button>
-        <button class="player-button is-primary" type="button" data-action="toggle" aria-label="播放或暂停">▶</button>
-        <button class="player-button" type="button" data-action="next" aria-label="下一首">▸▸</button>
-      </div>
-      <label class="volume-control">
-        <span>VOL</span>
-        <input id="volumeControl" type="range" min="0" max="100" value="42" />
-      </label>
-    </section>
 
     <footer class="site-footer">
       <span>© 2026 远山像素站</span>

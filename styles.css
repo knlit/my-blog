@@ -31,7 +31,6 @@ body {
   color: var(--text);
   font-family: "Courier New", "Microsoft YaHei", monospace;
   line-height: 1.6;
-  padding-bottom: 112px;
 }
 
 body::selection {
@@ -65,7 +64,7 @@ input {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -138,7 +137,7 @@ main {
   gap: 24px;
   align-items: center;
   min-height: 580px;
-  padding: 74px 0 54px;
+  padding: 54px 0;
 }
 
 .eyebrow {
@@ -439,17 +438,15 @@ h2 {
 }
 
 .music-player {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  left: 18px;
-  z-index: 30;
+  position: sticky;
+  top: 86px;
+  z-index: 25;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(180px, 260px);
   gap: 16px;
   align-items: center;
   width: min(1120px, calc(100% - 36px));
-  margin: 0 auto;
+  margin: 0 auto 22px;
   padding: 14px;
 }
 
@@ -561,13 +558,9 @@ h2 {
   }
 
   .music-player {
-    position: static;
+    top: 132px;
     width: min(1120px, calc(100% - 28px));
     margin-bottom: 28px;
-  }
-
-  body {
-    padding-bottom: 0;
   }
 }
 
