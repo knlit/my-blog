@@ -1,4 +1,10 @@
 @font-face {
+  font-family: "Silver Pixel";
+  src: url("assets/fonts/silver-pixel.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Monica Pixel";
   src: url("assets/fonts/monica-pixel-rounded.otf") format("opentype");
   font-display: swap;
@@ -46,7 +52,7 @@ body {
     var(--bg);
   background-size: 24px 24px;
   color: var(--text);
-  font-family: "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
+  font-family: "Silver Pixel", "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
   line-height: 1.6;
 }
 
