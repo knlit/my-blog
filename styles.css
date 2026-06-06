@@ -11,6 +11,18 @@
   --pixel: 4px;
 }
 
+body.light-theme {
+  --bg: #f8f4dc;
+  --surface: #fff9c7;
+  --surface-strong: #e8f7ef;
+  --text: #172531;
+  --muted: #50616d;
+  --line: #172531;
+  --accent: #007c89;
+  --accent-2: #a05c00;
+  --accent-3: #ff7caf;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -127,7 +139,8 @@ input {
   padding: 6px;
 }
 
-.site-nav a {
+.site-nav a,
+.theme-toggle {
   padding: 8px 12px;
   color: var(--muted);
   font-size: 0.95rem;
@@ -135,10 +148,18 @@ input {
 }
 
 .site-nav a:hover,
-.site-nav a:focus-visible {
+.site-nav a:focus-visible,
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
   background: var(--accent);
   color: var(--bg);
   outline: 0;
+}
+
+.theme-toggle {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 main {

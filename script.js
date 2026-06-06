@@ -60,7 +60,7 @@ const emptyState = document.querySelector("#emptyState");
 const searchInput = document.querySelector("#postSearch");
 const topicLinks = document.querySelectorAll("[data-topic]");
 const subscribeForm = document.querySelector(".subscribe-form");
-const heroPlay = document.querySelector(".hero-play");
+const themeToggle = document.querySelector(".theme-toggle");
 const playerStatus = document.querySelector("#playerStatus");
 const trackName = document.querySelector("#trackName");
 const volumeControl = document.querySelector("#volumeControl");
@@ -74,6 +74,13 @@ let timerId;
 let noteIndex = 0;
 let trackIndex = 0;
 let isPlaying = false;
+
+function applyTheme(theme) {
+  const isLight = theme === "light";
+  document.body.classList.toggle("light-theme", isLight);
+  themeToggle.textContent = `主题: ${isLight ? "昼" : "夜"}`;
+  themeToggle.setAttribute("aria-label", `切换到${isLight ? "夜间" : "日间"}主题`);
+}
 
 function renderPosts(query = "") {
   const normalizedQuery = query.trim().toLowerCase();
@@ -180,6 +187,12 @@ topicLinks.forEach((link) => {
   });
 });
 
+themeToggle.addEventListener("click", () => {
+  const nextTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
+  localStorage.setItem("blog-theme", nextTheme);
+  applyTheme(nextTheme);
+});
+
 toggleButton.addEventListener("click", () => {
   if (isPlaying) {
     stopPlayer();
@@ -188,7 +201,6 @@ toggleButton.addEventListener("click", () => {
   }
 });
 
-heroPlay.addEventListener("click", startPlayer);
 prevButton.addEventListener("click", () => changeTrack(-1));
 nextButton.addEventListener("click", () => changeTrack(1));
 
@@ -216,5 +228,6 @@ subscribeForm.addEventListener("submit", (event) => {
   }, 1800);
 });
 
+applyTheme(localStorage.getItem("blog-theme") || "dark");
 trackName.textContent = tracks[trackIndex].name;
 renderPosts();
