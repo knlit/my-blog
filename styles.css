@@ -8,7 +8,6 @@
   --accent: #6fffe9;
   --accent-2: #ffcf56;
   --accent-3: #ff6b9a;
-  --shadow: #05080c;
   --pixel: 4px;
 }
 
@@ -102,7 +101,6 @@ input {
 .search-box {
   border: var(--pixel) solid var(--line);
   background: var(--surface);
-  box-shadow: 8px 8px 0 var(--shadow);
 }
 
 .brand {
@@ -184,7 +182,6 @@ h1 {
   max-width: 760px;
   margin-bottom: 22px;
   font-size: clamp(2.6rem, 7vw, 5.3rem);
-  text-shadow: 5px 5px 0 var(--shadow);
 }
 
 h2 {
@@ -229,7 +226,6 @@ h2 {
 .player-button:hover,
 .subscribe-form button:hover {
   transform: translate(2px, 2px);
-  box-shadow: 4px 4px 0 var(--shadow);
 }
 
 .status-window {
@@ -378,7 +374,6 @@ h2 {
 .empty-state {
   border: var(--pixel) solid var(--line);
   background: var(--surface);
-  box-shadow: 8px 8px 0 var(--shadow);
   padding: 20px;
   color: var(--accent-2);
   font-weight: 800;
@@ -453,7 +448,6 @@ h2 {
   color: var(--bg);
   cursor: pointer;
   font-weight: 800;
-  box-shadow: 8px 8px 0 var(--shadow);
 }
 
 .music-player {
@@ -468,7 +462,6 @@ h2 {
   width: min(1120px, calc(100% - 36px));
   margin: 0;
   padding: 14px;
-  box-shadow: none;
   transform: translateX(-50%);
 }
 
@@ -505,7 +498,6 @@ h2 {
   border: var(--pixel) solid var(--line);
   background: var(--surface-strong);
   color: var(--text);
-  box-shadow: 8px 8px 0 var(--shadow);
   cursor: pointer;
   font-weight: 800;
 }
@@ -603,15 +595,4 @@ h2 {
     flex-direction: column;
   }
 
-  .brand,
-  .site-nav,
-  .button,
-  .status-window,
-  .post-card,
-  .topic-list a,
-  .newsletter,
-  .music-player,
-  .search-box {
-    box-shadow: 5px 5px 0 var(--shadow);
-  }
 }
