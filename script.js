@@ -78,7 +78,7 @@ let isPlaying = false;
 function applyTheme(theme) {
   const isLight = theme === "light";
   document.body.classList.toggle("light-theme", isLight);
-  themeToggle.textContent = `主题: ${isLight ? "昼" : "夜"}`;
+  themeToggle.textContent = isLight ? "☾" : "☀";
   themeToggle.setAttribute("aria-label", `切换到${isLight ? "夜间" : "日间"}主题`);
 }
 

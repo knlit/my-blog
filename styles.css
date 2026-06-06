@@ -157,9 +157,15 @@ input {
 }
 
 .theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  min-width: 36px;
+  height: 34px;
   border: 0;
   background: transparent;
   cursor: pointer;
+  line-height: 1;
 }
 
 main {
@@ -350,7 +356,7 @@ h2 {
 }
 
 .post-card.featured {
-  background: #25384b;
+  background: var(--surface-strong);
 }
 
 .post-meta {
