@@ -356,7 +356,7 @@ h2 {
 }
 
 .post-card.featured {
-  background: var(--surface-strong);
+  background: var(--surface);
 }
 
 .post-meta {
