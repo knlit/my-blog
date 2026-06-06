@@ -351,11 +351,16 @@ h2 {
 }
 
 .post-card:hover {
+  background: var(--surface-strong);
   transform: translate(-2px, -2px);
 }
 
 .post-card.featured {
   background: var(--surface);
+}
+
+.post-card.featured:hover {
+  background: var(--surface-strong);
 }
 
 .post-meta {
