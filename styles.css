@@ -351,7 +351,6 @@ h2 {
 }
 
 .post-card:hover {
-  background: var(--surface-strong);
   transform: translate(-2px, -2px);
 }
 
