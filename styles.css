@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Monica Pixel";
+  src: url("assets/fonts/monica-pixel-rounded.otf") format("opentype");
+  font-display: swap;
+}
+
 :root {
   --bg: #101820;
   --surface: #172531;
@@ -40,7 +46,7 @@ body {
     var(--bg);
   background-size: 24px 24px;
   color: var(--text);
-  font-family: "Courier New", "Microsoft YaHei", monospace;
+  font-family: "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
   line-height: 1.6;
 }
 
