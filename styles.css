@@ -141,8 +141,12 @@ input {
   place-items: center;
   width: 30px;
   height: 30px;
-  background: var(--accent-2);
-  color: var(--bg);
+  overflow: hidden;
+  background:
+    url("assets/icons/avatar.jpg") center / cover,
+    var(--accent-2);
+  color: transparent;
+  image-rendering: pixelated;
 }
 
 .site-nav {
