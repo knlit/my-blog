@@ -75,6 +75,7 @@ let timerId;
 let noteIndex = 0;
 let trackIndex = 0;
 let isPlaying = false;
+const shufflePlayback = true;
 
 function applyTheme(theme) {
   const isLight = theme === "light";
@@ -174,6 +175,21 @@ function tickTrack() {
   noteIndex += 1;
 }
 
+function getRandomTrackIndex() {
+  if (tracks.length <= 1) return trackIndex;
+
+  let nextIndex = trackIndex;
+  while (nextIndex === trackIndex) {
+    nextIndex = Math.floor(Math.random() * tracks.length);
+  }
+  return nextIndex;
+}
+
+function getNextTrackIndex(direction) {
+  if (shufflePlayback && direction > 0) return getRandomTrackIndex();
+  return (trackIndex + direction + tracks.length) % tracks.length;
+}
+
 function startPlayer() {
   if (!toggleButton || !playerStatus) return;
   ensureAudio();
@@ -202,7 +218,7 @@ function changeTrack(direction) {
   if (!trackName || !playerStatus) return;
   stopPlayer();
   noteIndex = 0;
-  trackIndex = (trackIndex + direction + tracks.length) % tracks.length;
+  trackIndex = getNextTrackIndex(direction);
   trackName.textContent = tracks[trackIndex].name;
   playerStatus.textContent = "READY";
 }

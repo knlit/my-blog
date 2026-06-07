@@ -662,13 +662,28 @@ h2 {
   left: 50%;
   z-index: 40;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(180px, 260px);
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(180px, 260px);
   gap: 16px;
   align-items: center;
   width: min(1120px, calc(100% - 36px));
   margin: 0;
   padding: 14px;
   transform: translateX(-50%);
+}
+
+.record-badge {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: var(--pixel) solid var(--line);
+  background: var(--surface-strong);
+}
+
+.record-badge img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
 }
 
 .track-screen {
@@ -789,6 +804,11 @@ h2 {
   .music-player {
     top: 156px;
     width: min(1120px, calc(100% - 28px));
+  }
+
+  .record-badge {
+    width: 46px;
+    height: 46px;
   }
 
   main {
