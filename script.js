@@ -308,6 +308,17 @@ function normalizeInternalUrl(url) {
   return url;
 }
 
+function syncPageShell(doc) {
+  const themeClass = document.body.classList.contains("light-theme") ? "light-theme" : "";
+  document.body.className = doc.body.className;
+  if (themeClass) document.body.classList.add(themeClass);
+
+  const player = document.querySelector(".music-player");
+  if (player) {
+    player.hidden = !doc.querySelector(".music-player");
+  }
+}
+
 async function visitPage(url, shouldPushState = true) {
   const targetUrl = normalizeInternalUrl(url);
   const response = await fetch(targetUrl.href);
@@ -329,6 +340,7 @@ async function visitPage(url, shouldPushState = true) {
   }
 
   document.title = doc.title;
+  syncPageShell(doc);
   nextMain.querySelectorAll("a[href]").forEach((link) => {
     link.href = new URL(link.getAttribute("href"), routeBase).href;
   });
@@ -354,7 +366,7 @@ document.addEventListener("click", (event) => {
 
   const url = new URL(link.getAttribute("href"), window.location.href);
   if (!isSameSitePage(url)) return;
-  if (url.pathname === window.location.pathname && url.hash) return;
+  if (normalizeInternalUrl(url).pathname === normalizeInternalUrl(new URL(window.location.href)).pathname && url.hash) return;
 
   event.preventDefault();
   visitPage(url).catch(() => {
