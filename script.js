@@ -69,7 +69,6 @@ const nextButton = document.querySelector("[data-action='next']");
 let trackIndex = 0;
 let isPlaying = false;
 let audioElement;
-const shufflePlayback = true;
 let autoplayRequested = true;
 
 function applyTheme(theme) {
@@ -164,18 +163,7 @@ function loadTrack() {
   if (trackName) trackName.textContent = tracks[trackIndex].name;
 }
 
-function getRandomTrackIndex() {
-  if (tracks.length <= 1) return trackIndex;
-
-  let nextIndex = trackIndex;
-  while (nextIndex === trackIndex) {
-    nextIndex = Math.floor(Math.random() * tracks.length);
-  }
-  return nextIndex;
-}
-
 function getNextTrackIndex(direction) {
-  if (shufflePlayback && direction > 0) return getRandomTrackIndex();
   return (trackIndex + direction + tracks.length) % tracks.length;
 }
 
