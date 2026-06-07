@@ -276,6 +276,7 @@ if (themeToggle) {
 if (toggleButton) {
   toggleButton.addEventListener("click", () => {
     autoplayRequested = false;
+    removeAutoplayUnlockListeners();
     if (isPlaying) {
       stopPlayer();
     } else {
@@ -380,13 +381,21 @@ window.addEventListener("popstate", () => {
   });
 });
 
-function unlockAutoplayOnFirstInteraction() {
+function removeAutoplayUnlockListeners() {
+  for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
+    document.removeEventListener(eventName, unlockAutoplayOnFirstInteraction);
+  }
+}
+
+function unlockAutoplayOnFirstInteraction(event) {
   if (!autoplayRequested || isPlaying) return;
+  if (event.target.closest?.(".music-player")) return;
   startPlayer();
+  removeAutoplayUnlockListeners();
 }
 
 for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
-  document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { once: true, passive: true });
+  document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { passive: true });
 }
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");

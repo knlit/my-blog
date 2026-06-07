@@ -734,6 +734,10 @@ h2 {
   transform: translateX(-50%);
 }
 
+.music-player[hidden] {
+  display: none;
+}
+
 .record-badge {
   display: grid;
   place-items: center;
