@@ -6,7 +6,7 @@ const posts = [
     datetime: "2026-06-01",
     excerpt: "从目录结构、边界命名、测试补位到发布流程，记录一次让老项目重新变得可维护的过程。",
     tags: ["重构", "测试", "项目维护"],
-    url: "#",
+    url: "posts/refactor-checklist.html",
     featured: true,
   },
   {
@@ -16,7 +16,7 @@ const posts = [
     datetime: "2026-05-24",
     excerpt: "界面、默认值和反馈如何替用户减轻认知负担。",
     tags: ["产品", "体验", "效率"],
-    url: "#",
+    url: "posts/tool-thinking.html",
   },
   {
     title: "读《纳瓦尔宝典》：复利不是口号",
@@ -25,7 +25,7 @@ const posts = [
     datetime: "2026-05-12",
     excerpt: "把长期主义拆成每天能执行的小动作。",
     tags: ["阅读", "长期主义", "成长"],
-    url: "#",
+    url: "posts/naval-compound-interest.html",
   },
   {
     title: "给个人知识库做一次减法",
@@ -34,7 +34,7 @@ const posts = [
     datetime: "2026-04-30",
     excerpt: "比起收集更多工具，先让笔记、任务和复盘回到一个能坚持的节奏。",
     tags: ["知识库", "AI", "工作流"],
-    url: "#",
+    url: "posts/knowledge-base-pruning.html",
   },
   {
     title: "周末城市漫游：把路线留给直觉",
@@ -43,14 +43,19 @@ const posts = [
     datetime: "2026-04-12",
     excerpt: "一次没有计划的散步，以及那些被慢下来之后才看见的小细节。",
     tags: ["生活", "城市", "记录"],
-    url: "#",
+    url: "posts/city-walk.html",
   },
 ];
 
 const tracks = [
-  { name: "8-bit midnight loop", notes: [392, 494, 587, 494, 440, 392, 330, 392] },
-  { name: "coffee save point", notes: [262, 330, 392, 523, 392, 330, 294, 330] },
-  { name: "tiny boss theme", notes: [196, 247, 294, 349, 294, 247, 220, 247] },
+  { name: "8-bit 《稻香》", src: "assets/audio/daoxiang-8bit.wav" },
+  { name: "8-bit 《七里香》", src: "assets/audio/qilixiang-8bit.wav" },
+  { name: "8-bit 《晴天》", src: "assets/audio/qingtian-8bit.wav" },
+  { name: "8-bit 《Super Star》", src: "assets/audio/super-star-8bit.wav" },
+  { name: "8-bit 《宝可梦-未白镇》", src: "assets/audio/pokemon-weibai-town-8bit.wav" },
+  { name: "8-bit 《海阔天空》", src: "assets/audio/haikuotiankong-8bit.wav" },
+  { name: "8-bit 《开心超人》", src: "assets/audio/kaixinchaoren-8bit.wav" },
+  { name: "8-bit 《突然的自我》", src: "assets/audio/turandezhiwo-8bit.wav" },
 ];
 
 const articleGrid = document.querySelector("#articleGrid");
@@ -69,12 +74,9 @@ const toggleButton = document.querySelector("[data-action='toggle']");
 const prevButton = document.querySelector("[data-action='prev']");
 const nextButton = document.querySelector("[data-action='next']");
 
-let audioContext;
-let gainNode;
-let timerId;
-let noteIndex = 0;
 let trackIndex = 0;
 let isPlaying = false;
+let audioElement;
 const shufflePlayback = true;
 
 function applyTheme(theme) {
@@ -145,34 +147,23 @@ function renderLatestPostsMarquee() {
 }
 
 function ensureAudio() {
-  if (!volumeControl) return;
-  if (audioContext) return;
+  if (!volumeControl) return null;
+  if (audioElement) return audioElement;
 
-  audioContext = new AudioContext();
-  gainNode = audioContext.createGain();
-  gainNode.gain.value = Number(volumeControl.value) / 100;
-  gainNode.connect(audioContext.destination);
+  audioElement = new Audio(tracks[trackIndex].src);
+  audioElement.preload = "metadata";
+  audioElement.volume = Number(volumeControl.value) / 100;
+  audioElement.addEventListener("ended", () => changeTrack(1, true));
+  return audioElement;
 }
 
-function playNote(frequency, duration = 0.16) {
-  const oscillator = audioContext.createOscillator();
-  const noteGain = audioContext.createGain();
-  const now = audioContext.currentTime;
+function loadTrack() {
+  const audio = ensureAudio();
+  if (!audio) return;
 
-  oscillator.type = "square";
-  oscillator.frequency.setValueAtTime(frequency, now);
-  noteGain.gain.setValueAtTime(0.0001, now);
-  noteGain.gain.exponentialRampToValueAtTime(0.24, now + 0.01);
-  noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-  oscillator.connect(noteGain).connect(gainNode);
-  oscillator.start(now);
-  oscillator.stop(now + duration + 0.02);
-}
-
-function tickTrack() {
-  const track = tracks[trackIndex];
-  playNote(track.notes[noteIndex % track.notes.length]);
-  noteIndex += 1;
+  audio.src = tracks[trackIndex].src;
+  audio.load();
+  if (trackName) trackName.textContent = tracks[trackIndex].name;
 }
 
 function getRandomTrackIndex() {
@@ -192,35 +183,45 @@ function getNextTrackIndex(direction) {
 
 function startPlayer() {
   if (!toggleButton || !playerStatus) return;
-  ensureAudio();
-
-  if (audioContext.state === "suspended") {
-    audioContext.resume();
-  }
+  const audio = ensureAudio();
+  if (!audio) return;
 
   if (isPlaying) return;
 
   isPlaying = true;
   toggleButton.textContent = "▮▮";
-  playerStatus.textContent = "PLAYING";
-  tickTrack();
-  timerId = window.setInterval(tickTrack, 220);
+  playerStatus.textContent = "LOADING";
+
+  audio
+    .play()
+    .then(() => {
+      playerStatus.textContent = "PLAYING";
+    })
+    .catch(() => {
+      isPlaying = false;
+      toggleButton.textContent = "▶";
+      playerStatus.textContent = "READY";
+    });
 }
 
 function stopPlayer() {
   isPlaying = false;
   if (toggleButton) toggleButton.textContent = "▶";
   if (playerStatus) playerStatus.textContent = "PAUSED";
-  window.clearInterval(timerId);
+  if (audioElement) audioElement.pause();
 }
 
-function changeTrack(direction) {
+function changeTrack(direction, shouldAutoplay = false) {
   if (!trackName || !playerStatus) return;
-  stopPlayer();
-  noteIndex = 0;
+  const wasPlaying = isPlaying || shouldAutoplay;
+  if (audioElement) audioElement.pause();
+  isPlaying = false;
+  if (toggleButton) toggleButton.textContent = "▶";
   trackIndex = getNextTrackIndex(direction);
-  trackName.textContent = tracks[trackIndex].name;
   playerStatus.textContent = "READY";
+  loadTrack();
+
+  if (wasPlaying) startPlayer();
 }
 
 if (searchInput) {
@@ -259,8 +260,8 @@ if (nextButton) nextButton.addEventListener("click", () => changeTrack(1));
 
 if (volumeControl) {
   volumeControl.addEventListener("input", () => {
-    if (gainNode) {
-      gainNode.gain.value = Number(volumeControl.value) / 100;
+    if (audioElement) {
+      audioElement.volume = Number(volumeControl.value) / 100;
     }
   });
 }
@@ -287,5 +288,6 @@ if (subscribeForm) {
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");
 if (trackName) trackName.textContent = tracks[trackIndex].name;
+loadTrack();
 renderLatestPostsMarquee();
 renderPosts();

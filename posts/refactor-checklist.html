@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>一次把旧项目整理清楚的重构清单 | 远山像素站</title>
+    <meta name="description" content="从目录结构、边界命名、测试补位到发布流程，记录一次让老项目重新变得可维护的过程。" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="sub-page article-page">
+    <div class="pixel-noise" aria-hidden="true"></div>
+    <nav class="social-dock" aria-label="社交链接">
+      <a href="https://space.bilibili.com/476263980" target="_blank" rel="noopener noreferrer" aria-label="打开 Bilibili 主页">
+        <img src="assets/icons/bilibili.png" alt="" />
+      </a>
+      <a href="https://www.douyin.com/user/self" target="_blank" rel="noopener noreferrer" aria-label="打开抖音主页">
+        <img src="assets/icons/douyin.png" alt="" />
+      </a>
+    </nav>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="回到首页">
+        <span class="brand-mark">B</span>
+        <span>远山像素站</span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#articles">文章</a>
+        <a href="topics.html">专题</a>
+        <a href="contact.html">联系</a>
+        <button class="theme-toggle" type="button" aria-label="切换到日间主题">
+          <img src="assets/icons/theme-star.png" alt="" />
+        </button>
+      </nav>
+    </header>
+    <main>
+      <article class="article-shell">
+        <header class="article-header">
+          <p class="eyebrow">ENGINEERING NOTE</p>
+          <h1>一次把旧项目整理清楚的重构清单</h1>
+          <div class="article-meta">
+            <span>工程实践</span>
+            <time datetime="2026-06-01">2026.06.01</time>
+          </div>
+        </header>
+        <div class="article-body">
+          <p>这是一篇文章页示例。之后你可以把这里替换成真实正文，首页卡片会直接跳到这个独立页面。</p>
+          <h2>先把边界画出来</h2>
+          <p>整理旧项目时，我通常先记录目录职责、入口文件、公共工具和高频修改点。能被说清楚的边界，后面才有机会被稳定维护。</p>
+          <h2>再补最低限度测试</h2>
+          <p>测试不一定一开始就铺满，但至少要覆盖最容易被改坏的路径。这样后续清理命名、拆分模块和调整流程时，心里会更有底。</p>
+          <div class="article-tags">
+            <span>#重构</span>
+            <span>#测试</span>
+            <span>#项目维护</span>
+          </div>
+          <a class="article-back" href="index.html#articles">返回文章列表 ▸</a>
+        </div>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <span>© 2026 远山像素站</span>
+      <span>ARTICLE SAVE FILE</span>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
