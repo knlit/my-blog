@@ -58,14 +58,6 @@ const tracks = [
   { name: "8-bit 《突然的自我》", src: "assets/audio/turandezhiwo-8bit.wav" },
 ];
 
-const articleGrid = document.querySelector("#articleGrid");
-const articleCount = document.querySelector("#articleCount");
-const resultCount = document.querySelector("#resultCount");
-const emptyState = document.querySelector("#emptyState");
-const latestPostsMarquee = document.querySelector("#latestPostsMarquee");
-const searchInput = document.querySelector("#postSearch");
-const topicLinks = document.querySelectorAll("[data-topic]");
-const subscribeForm = document.querySelector(".subscribe-form");
 const themeToggle = document.querySelector(".theme-toggle");
 const playerStatus = document.querySelector("#playerStatus");
 const trackName = document.querySelector("#trackName");
@@ -78,6 +70,7 @@ let trackIndex = 0;
 let isPlaying = false;
 let audioElement;
 const shufflePlayback = true;
+let autoplayRequested = true;
 
 function applyTheme(theme) {
   const isLight = theme === "light";
@@ -93,6 +86,10 @@ function applyTheme(theme) {
 }
 
 function renderPosts(query = "") {
+  const articleGrid = document.querySelector("#articleGrid");
+  const articleCount = document.querySelector("#articleCount");
+  const resultCount = document.querySelector("#resultCount");
+  const emptyState = document.querySelector("#emptyState");
   if (!articleGrid || !articleCount || !resultCount || !emptyState) return;
 
   const normalizedQuery = query.trim().toLowerCase();
@@ -128,6 +125,7 @@ function renderPosts(query = "") {
 }
 
 function renderLatestPostsMarquee() {
+  const latestPostsMarquee = document.querySelector("#latestPostsMarquee");
   if (!latestPostsMarquee) return;
 
   const latestPosts = posts.slice(0, 5);
@@ -200,7 +198,7 @@ function startPlayer() {
     .catch(() => {
       isPlaying = false;
       toggleButton.textContent = "▶";
-      playerStatus.textContent = "READY";
+      playerStatus.textContent = autoplayRequested ? "CLICK PLAY" : "READY";
     });
 }
 
@@ -224,18 +222,48 @@ function changeTrack(direction, shouldAutoplay = false) {
   if (wasPlaying) startPlayer();
 }
 
-if (searchInput) {
-  searchInput.addEventListener("input", (event) => {
-    renderPosts(event.target.value);
-  });
-}
+function hydratePage() {
+  const searchInput = document.querySelector("#postSearch");
+  const topicLinks = document.querySelectorAll("[data-topic]");
+  const subscribeForm = document.querySelector(".subscribe-form");
 
-topicLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    searchInput.value = link.dataset.topic;
-    renderPosts(link.dataset.topic);
+  if (searchInput) {
+    searchInput.addEventListener("input", (event) => {
+      renderPosts(event.target.value);
+    });
+  }
+
+  topicLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      if (!searchInput) return;
+      searchInput.value = link.dataset.topic;
+      renderPosts(link.dataset.topic);
+    });
   });
-});
+
+  if (subscribeForm) {
+    subscribeForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const email = new FormData(subscribeForm).get("email");
+      const button = subscribeForm.querySelector("button");
+
+      if (!email) {
+        button.textContent = "请输入邮箱";
+        return;
+      }
+
+      button.textContent = "已发送";
+      subscribeForm.reset();
+
+      window.setTimeout(() => {
+        button.textContent = "发送";
+      }, 1800);
+    });
+  }
+
+  renderLatestPostsMarquee();
+  renderPosts();
+}
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
@@ -247,6 +275,7 @@ if (themeToggle) {
 
 if (toggleButton) {
   toggleButton.addEventListener("click", () => {
+    autoplayRequested = false;
     if (isPlaying) {
       stopPlayer();
     } else {
@@ -266,28 +295,90 @@ if (volumeControl) {
   });
 }
 
-if (subscribeForm) {
-  subscribeForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const email = new FormData(subscribeForm).get("email");
-    const button = subscribeForm.querySelector("button");
+function isSameSitePage(url) {
+  if (url.origin !== window.location.origin) return false;
+  const path = url.pathname.toLowerCase();
+  return path.endsWith("/") || path.endsWith(".html");
+}
 
-    if (!email) {
-      button.textContent = "请输入邮箱";
-      return;
-    }
+function normalizeInternalUrl(url) {
+  if (url.pathname.endsWith("/")) {
+    return new URL(`index.html${url.hash}`, url);
+  }
+  return url;
+}
 
-    button.textContent = "已发送";
-    subscribeForm.reset();
+async function visitPage(url, shouldPushState = true) {
+  const targetUrl = normalizeInternalUrl(url);
+  const response = await fetch(targetUrl.href);
+  if (!response.ok) throw new Error("Page request failed");
 
-    window.setTimeout(() => {
-      button.textContent = "发送";
-    }, 1800);
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const nextMain = doc.querySelector("main");
+  const nextFooter = doc.querySelector(".site-footer");
+  const routeBase = doc.querySelector("base")
+    ? new URL(doc.querySelector("base").getAttribute("href"), targetUrl.href)
+    : targetUrl;
+  const currentMain = document.querySelector("main");
+  const currentFooter = document.querySelector(".site-footer");
+
+  if (!nextMain || !currentMain) {
+    window.location.href = targetUrl.href;
+    return;
+  }
+
+  document.title = doc.title;
+  nextMain.querySelectorAll("a[href]").forEach((link) => {
+    link.href = new URL(link.getAttribute("href"), routeBase).href;
   });
+  currentMain.replaceWith(nextMain);
+  if (nextFooter && currentFooter) currentFooter.replaceWith(nextFooter);
+
+  hydratePage();
+
+  if (shouldPushState) {
+    history.pushState({ path: targetUrl.href }, "", targetUrl.href);
+  }
+
+  if (targetUrl.hash) {
+    document.querySelector(targetUrl.hash)?.scrollIntoView();
+  } else {
+    window.scrollTo({ top: 0 });
+  }
+}
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest("a");
+  if (!link || link.target || link.hasAttribute("download")) return;
+
+  const url = new URL(link.getAttribute("href"), window.location.href);
+  if (!isSameSitePage(url)) return;
+  if (url.pathname === window.location.pathname && url.hash) return;
+
+  event.preventDefault();
+  visitPage(url).catch(() => {
+    window.location.href = url.href;
+  });
+});
+
+window.addEventListener("popstate", () => {
+  visitPage(new URL(window.location.href), false).catch(() => {
+    window.location.reload();
+  });
+});
+
+function unlockAutoplayOnFirstInteraction() {
+  if (!autoplayRequested || isPlaying) return;
+  startPlayer();
+}
+
+for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
+  document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { once: true, passive: true });
 }
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");
 if (trackName) trackName.textContent = tracks[trackIndex].name;
 loadTrack();
-renderLatestPostsMarquee();
-renderPosts();
+startPlayer();
+hydratePage();
