@@ -153,6 +153,8 @@ input {
 
 .site-nav a,
 .theme-toggle {
+  display: grid;
+  place-items: center;
   padding: 8px 12px;
   color: var(--muted);
   font-size: 0.95rem;
@@ -169,8 +171,6 @@ input {
 }
 
 .theme-toggle {
-  display: grid;
-  place-items: center;
   width: 38px;
   min-width: 38px;
   height: 36px;
@@ -728,9 +728,10 @@ h2 {
   }
 
   .site-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
-    justify-content: space-between;
-    overflow-x: auto;
+    overflow: hidden;
   }
 
   .hero,
