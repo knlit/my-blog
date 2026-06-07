@@ -196,8 +196,13 @@ main {
   height: 118px;
 }
 
-.contact-page main {
+.contact-page main,
+.sub-page main {
   padding-top: 150px;
+}
+
+.sub-page::before {
+  height: 118px;
 }
 
 .hero {
@@ -531,6 +536,10 @@ h2 {
   padding: 18px;
 }
 
+.topic-page-list {
+  margin-bottom: 74px;
+}
+
 .newsletter p {
   color: var(--muted);
 }
@@ -695,11 +704,13 @@ h2 {
     padding-top: 390px;
   }
 
-  .contact-page::before {
+  .contact-page::before,
+  .sub-page::before {
     height: 208px;
   }
 
-  .contact-page main {
+  .contact-page main,
+  .sub-page main {
     padding-top: 240px;
   }
 
