@@ -57,6 +57,7 @@ const articleGrid = document.querySelector("#articleGrid");
 const articleCount = document.querySelector("#articleCount");
 const resultCount = document.querySelector("#resultCount");
 const emptyState = document.querySelector("#emptyState");
+const latestPostsMarquee = document.querySelector("#latestPostsMarquee");
 const searchInput = document.querySelector("#postSearch");
 const topicLinks = document.querySelectorAll("[data-topic]");
 const subscribeForm = document.querySelector(".subscribe-form");
@@ -121,6 +122,25 @@ function renderPosts(query = "") {
     ? `找到 ${filteredPosts.length} / ${posts.length} 篇文章`
     : `共 ${posts.length} 篇文章`;
   emptyState.hidden = filteredPosts.length > 0;
+}
+
+function renderLatestPostsMarquee() {
+  if (!latestPostsMarquee) return;
+
+  const latestPosts = posts.slice(0, 5);
+  const marqueeItems = latestPosts
+    .map(
+      (post) => `
+        <a class="marquee-item" href="${post.url}" aria-label="阅读：${post.title}">
+          <span class="marquee-category">${post.category}</span>
+          <span class="marquee-title">${post.title}</span>
+          <time class="marquee-date" datetime="${post.datetime}">${post.date}</time>
+        </a>
+      `
+    )
+    .join("");
+
+  latestPostsMarquee.innerHTML = marqueeItems + marqueeItems;
 }
 
 function ensureAudio() {
@@ -251,4 +271,5 @@ if (subscribeForm) {
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");
 if (trackName) trackName.textContent = tracks[trackIndex].name;
+renderLatestPostsMarquee();
 renderPosts();
