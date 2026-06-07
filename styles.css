@@ -191,6 +191,38 @@ input {
   image-rendering: pixelated;
 }
 
+.social-dock {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 44;
+  display: grid;
+  gap: 10px;
+}
+
+.social-dock a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: var(--pixel) solid var(--line);
+  background: var(--surface);
+}
+
+.social-dock a:hover,
+.social-dock a:focus-visible {
+  background: var(--surface-strong);
+  outline: 0;
+  transform: translate(2px, 2px);
+}
+
+.social-dock img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
 main {
   width: min(1120px, calc(100% - 28px));
   margin: 0 auto;
@@ -775,6 +807,21 @@ h2 {
 
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .social-dock {
+    left: 14px;
+    bottom: 14px;
+  }
+
+  .social-dock a {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social-dock img {
+    width: 28px;
+    height: 28px;
   }
 }
 
