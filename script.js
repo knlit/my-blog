@@ -77,13 +77,20 @@ let isPlaying = false;
 
 function applyTheme(theme) {
   const isLight = theme === "light";
-  const icon = themeToggle.querySelector("img");
   document.body.classList.toggle("light-theme", isLight);
-  icon.src = isLight ? "assets/icons/theme-moon.png" : "assets/icons/theme-star.png";
+
+  if (!themeToggle) return;
+
+  const icon = themeToggle.querySelector("img");
+  if (icon) {
+    icon.src = isLight ? "assets/icons/theme-moon.png" : "assets/icons/theme-star.png";
+  }
   themeToggle.setAttribute("aria-label", `切换到${isLight ? "夜间" : "日间"}主题`);
 }
 
 function renderPosts(query = "") {
+  if (!articleGrid || !articleCount || !resultCount || !emptyState) return;
+
   const normalizedQuery = query.trim().toLowerCase();
   const filteredPosts = posts.filter((post) => {
     const searchable = [post.title, post.category, post.excerpt, ...post.tags].join(" ").toLowerCase();
@@ -117,6 +124,7 @@ function renderPosts(query = "") {
 }
 
 function ensureAudio() {
+  if (!volumeControl) return;
   if (audioContext) return;
 
   audioContext = new AudioContext();
@@ -147,6 +155,7 @@ function tickTrack() {
 }
 
 function startPlayer() {
+  if (!toggleButton || !playerStatus) return;
   ensureAudio();
 
   if (audioContext.state === "suspended") {
@@ -164,12 +173,13 @@ function startPlayer() {
 
 function stopPlayer() {
   isPlaying = false;
-  toggleButton.textContent = "▶";
-  playerStatus.textContent = "PAUSED";
+  if (toggleButton) toggleButton.textContent = "▶";
+  if (playerStatus) playerStatus.textContent = "PAUSED";
   window.clearInterval(timerId);
 }
 
 function changeTrack(direction) {
+  if (!trackName || !playerStatus) return;
   stopPlayer();
   noteIndex = 0;
   trackIndex = (trackIndex + direction + tracks.length) % tracks.length;
@@ -177,9 +187,11 @@ function changeTrack(direction) {
   playerStatus.textContent = "READY";
 }
 
-searchInput.addEventListener("input", (event) => {
-  renderPosts(event.target.value);
-});
+if (searchInput) {
+  searchInput.addEventListener("input", (event) => {
+    renderPosts(event.target.value);
+  });
+}
 
 topicLinks.forEach((link) => {
   link.addEventListener("click", () => {
@@ -188,47 +200,55 @@ topicLinks.forEach((link) => {
   });
 });
 
-themeToggle.addEventListener("click", () => {
-  const nextTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
-  localStorage.setItem("blog-theme", nextTheme);
-  applyTheme(nextTheme);
-});
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
+    localStorage.setItem("blog-theme", nextTheme);
+    applyTheme(nextTheme);
+  });
+}
 
-toggleButton.addEventListener("click", () => {
-  if (isPlaying) {
-    stopPlayer();
-  } else {
-    startPlayer();
-  }
-});
+if (toggleButton) {
+  toggleButton.addEventListener("click", () => {
+    if (isPlaying) {
+      stopPlayer();
+    } else {
+      startPlayer();
+    }
+  });
+}
 
-prevButton.addEventListener("click", () => changeTrack(-1));
-nextButton.addEventListener("click", () => changeTrack(1));
+if (prevButton) prevButton.addEventListener("click", () => changeTrack(-1));
+if (nextButton) nextButton.addEventListener("click", () => changeTrack(1));
 
-volumeControl.addEventListener("input", () => {
-  if (gainNode) {
-    gainNode.gain.value = Number(volumeControl.value) / 100;
-  }
-});
+if (volumeControl) {
+  volumeControl.addEventListener("input", () => {
+    if (gainNode) {
+      gainNode.gain.value = Number(volumeControl.value) / 100;
+    }
+  });
+}
 
-subscribeForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const email = new FormData(subscribeForm).get("email");
-  const button = subscribeForm.querySelector("button");
+if (subscribeForm) {
+  subscribeForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = new FormData(subscribeForm).get("email");
+    const button = subscribeForm.querySelector("button");
 
-  if (!email) {
-    button.textContent = "请输入邮箱";
-    return;
-  }
+    if (!email) {
+      button.textContent = "请输入邮箱";
+      return;
+    }
 
-  button.textContent = "已发送";
-  subscribeForm.reset();
+    button.textContent = "已发送";
+    subscribeForm.reset();
 
-  window.setTimeout(() => {
-    button.textContent = "发送";
-  }, 1800);
-});
+    window.setTimeout(() => {
+      button.textContent = "发送";
+    }, 1800);
+  });
+}
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");
-trackName.textContent = tracks[trackIndex].name;
+if (trackName) trackName.textContent = tracks[trackIndex].name;
 renderPosts();
