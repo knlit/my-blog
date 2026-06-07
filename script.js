@@ -303,6 +303,10 @@ function isSameSitePage(url) {
 }
 
 function normalizeInternalUrl(url) {
+  if (url.pathname.endsWith("/posts/index.html")) {
+    return new URL(`../index.html${url.hash}`, url);
+  }
+
   if (url.pathname.endsWith("/")) {
     return new URL(`index.html${url.hash}`, url);
   }
@@ -365,7 +369,7 @@ document.addEventListener("click", (event) => {
   const link = event.target.closest("a");
   if (!link || link.target || link.hasAttribute("download")) return;
 
-  const url = new URL(link.getAttribute("href"), window.location.href);
+  const url = new URL(link.href);
   if (!isSameSitePage(url)) return;
   if (normalizeInternalUrl(url).pathname === normalizeInternalUrl(new URL(window.location.href)).pathname && url.hash) return;
 
