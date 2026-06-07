@@ -77,8 +77,9 @@ let isPlaying = false;
 
 function applyTheme(theme) {
   const isLight = theme === "light";
+  const icon = themeToggle.querySelector("img");
   document.body.classList.toggle("light-theme", isLight);
-  themeToggle.textContent = isLight ? "☾" : "☀";
+  icon.src = isLight ? "assets/icons/theme-moon.png" : "assets/icons/theme-star.png";
   themeToggle.setAttribute("aria-label", `切换到${isLight ? "夜间" : "日间"}主题`);
 }
 
