@@ -65,15 +65,23 @@ const volumeControl = document.querySelector("#volumeControl");
 const toggleButton = document.querySelector("[data-action='toggle']");
 const prevButton = document.querySelector("[data-action='prev']");
 const nextButton = document.querySelector("[data-action='next']");
+const desktopBackgroundQuery = window.matchMedia("(min-width: 901px)");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const themeVideos = {
+  dark: "assets/backgrounds/night-pixel-bg.mp4",
+  light: "assets/backgrounds/day-pixel-bg.mp4",
+};
 
 let trackIndex = 0;
 let isPlaying = false;
 let audioElement;
 let autoplayRequested = true;
+let themeVideoElement;
 
 function applyTheme(theme) {
   const isLight = theme === "light";
   document.body.classList.toggle("light-theme", isLight);
+  updateThemeVideo(isLight ? "light" : "dark");
 
   if (!themeToggle) return;
 
@@ -82,6 +90,45 @@ function applyTheme(theme) {
     icon.src = isLight ? "assets/icons/theme-moon.png" : "assets/icons/theme-star.png";
   }
   themeToggle.setAttribute("aria-label", `切换到${isLight ? "夜间" : "日间"}主题`);
+}
+
+function shouldUseThemeVideo() {
+  return desktopBackgroundQuery.matches && !reducedMotionQuery.matches;
+}
+
+function ensureThemeVideo() {
+  if (themeVideoElement) return themeVideoElement;
+
+  themeVideoElement = document.createElement("video");
+  themeVideoElement.className = "theme-video-bg";
+  themeVideoElement.autoplay = true;
+  themeVideoElement.loop = true;
+  themeVideoElement.muted = true;
+  themeVideoElement.playsInline = true;
+  themeVideoElement.setAttribute("aria-hidden", "true");
+  themeVideoElement.setAttribute("preload", "metadata");
+  document.body.prepend(themeVideoElement);
+
+  return themeVideoElement;
+}
+
+function updateThemeVideo(theme) {
+  if (!shouldUseThemeVideo()) {
+    if (themeVideoElement) {
+      themeVideoElement.pause();
+      themeVideoElement.removeAttribute("src");
+      themeVideoElement.load();
+    }
+    return;
+  }
+
+  const video = ensureThemeVideo();
+  const src = new URL(themeVideos[theme], document.baseURI).href;
+  if (video.src !== src) {
+    video.src = src;
+    video.load();
+  }
+  video.play().catch(() => {});
 }
 
 function renderPosts(query = "") {
@@ -395,6 +442,13 @@ function unlockAutoplayOnFirstInteraction(event) {
 
 for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
   document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { passive: true });
+}
+
+for (const mediaQuery of [desktopBackgroundQuery, reducedMotionQuery]) {
+  mediaQuery.addEventListener("change", () => {
+    const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
+    updateThemeVideo(theme);
+  });
 }
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");

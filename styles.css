@@ -20,6 +20,7 @@
   --accent: #6fffe9;
   --accent-2: #ffcf56;
   --accent-3: #ff6b9a;
+  --video-opacity: 0.38;
   --pixel: 4px;
 }
 
@@ -33,6 +34,7 @@ body.light-theme {
   --accent: #007c89;
   --accent-2: #a05c00;
   --accent-3: #ff7caf;
+  --video-opacity: 0.42;
 }
 
 * {
@@ -56,6 +58,18 @@ body {
   color: var(--text);
   font-family: "Silver Pixel", "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
   line-height: 1.6;
+}
+
+.theme-video-bg {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--video-opacity);
 }
 
 body::before {
@@ -234,6 +248,8 @@ input {
 }
 
 main {
+  position: relative;
+  z-index: 1;
   width: min(1120px, calc(100% - 28px));
   margin: 0 auto;
   padding-top: 220px;
@@ -824,6 +840,8 @@ h2 {
 }
 
 .site-footer {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -844,7 +862,17 @@ h2 {
   white-space: nowrap;
 }
 
+@media (min-width: 901px) {
+  .theme-video-bg {
+    display: block;
+  }
+}
+
 @media (max-width: 900px) {
+  .theme-video-bg {
+    display: none;
+  }
+
   body::before {
     height: 332px;
   }
