@@ -65,10 +65,16 @@ const volumeControl = document.querySelector("#volumeControl");
 const toggleButton = document.querySelector("[data-action='toggle']");
 const prevButton = document.querySelector("[data-action='prev']");
 const nextButton = document.querySelector("[data-action='next']");
-const desktopBackgroundQuery = window.matchMedia("(min-width: 901px)");
+const mobileBackgroundQuery = window.matchMedia("(max-width: 900px)");
 const themeVideos = {
-  dark: "assets/backgrounds/night-pixel-bg.mp4",
-  light: "assets/backgrounds/day-pixel-bg.mp4",
+  desktop: {
+    dark: "assets/backgrounds/night-pixel-bg.mp4",
+    light: "assets/backgrounds/day-pixel-bg.mp4",
+  },
+  mobile: {
+    dark: "assets/backgrounds/night-pixel-bg-mobile.mp4",
+    light: "assets/backgrounds/day-pixel-bg-mobile.mp4",
+  },
 };
 
 let trackIndex = 0;
@@ -91,8 +97,9 @@ function applyTheme(theme) {
   themeToggle.setAttribute("aria-label", `切换到${isLight ? "夜间" : "日间"}主题`);
 }
 
-function shouldUseThemeVideo() {
-  return desktopBackgroundQuery.matches;
+function getThemeVideoSrc(theme) {
+  const size = mobileBackgroundQuery.matches ? "mobile" : "desktop";
+  return themeVideos[size][theme];
 }
 
 function ensureThemeVideo() {
@@ -112,17 +119,8 @@ function ensureThemeVideo() {
 }
 
 function updateThemeVideo(theme) {
-  if (!shouldUseThemeVideo()) {
-    if (themeVideoElement) {
-      themeVideoElement.pause();
-      themeVideoElement.removeAttribute("src");
-      themeVideoElement.load();
-    }
-    return;
-  }
-
   const video = ensureThemeVideo();
-  const src = new URL(themeVideos[theme], document.baseURI).href;
+  const src = new URL(getThemeVideoSrc(theme), document.baseURI).href;
   if (video.src !== src) {
     video.src = src;
     video.load();
@@ -443,7 +441,7 @@ for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
   document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { passive: true });
 }
 
-desktopBackgroundQuery.addEventListener("change", () => {
+mobileBackgroundQuery.addEventListener("change", () => {
   const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
   updateThemeVideo(theme);
 });
