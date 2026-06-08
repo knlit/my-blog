@@ -66,7 +66,6 @@ const toggleButton = document.querySelector("[data-action='toggle']");
 const prevButton = document.querySelector("[data-action='prev']");
 const nextButton = document.querySelector("[data-action='next']");
 const desktopBackgroundQuery = window.matchMedia("(min-width: 901px)");
-const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const themeVideos = {
   dark: "assets/backgrounds/night-pixel-bg.mp4",
   light: "assets/backgrounds/day-pixel-bg.mp4",
@@ -93,7 +92,7 @@ function applyTheme(theme) {
 }
 
 function shouldUseThemeVideo() {
-  return desktopBackgroundQuery.matches && !reducedMotionQuery.matches;
+  return desktopBackgroundQuery.matches;
 }
 
 function ensureThemeVideo() {
@@ -444,12 +443,10 @@ for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
   document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { passive: true });
 }
 
-for (const mediaQuery of [desktopBackgroundQuery, reducedMotionQuery]) {
-  mediaQuery.addEventListener("change", () => {
-    const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-    updateThemeVideo(theme);
-  });
-}
+desktopBackgroundQuery.addEventListener("change", () => {
+  const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
+  updateThemeVideo(theme);
+});
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");
 if (trackName) trackName.textContent = tracks[trackIndex].name;
