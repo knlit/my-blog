@@ -886,6 +886,8 @@ h2 {
   }
 
   .record-badge {
+    justify-self: center;
+    align-self: center;
     width: 42px;
     height: 42px;
   }
