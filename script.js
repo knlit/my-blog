@@ -312,6 +312,14 @@ function syncPageShell(doc) {
   }
 }
 
+function resolveLinks(root, routeBase) {
+  if (!root) return;
+
+  root.querySelectorAll("a[href]").forEach((link) => {
+    link.href = new URL(link.getAttribute("href"), routeBase).href;
+  });
+}
+
 async function visitPage(url, shouldPushState = true) {
   const targetUrl = normalizeInternalUrl(url);
   const response = await fetch(targetUrl.href);
@@ -334,11 +342,10 @@ async function visitPage(url, shouldPushState = true) {
 
   document.title = doc.title;
   syncPageShell(doc);
-  nextMain.querySelectorAll("a[href]").forEach((link) => {
-    link.href = new URL(link.getAttribute("href"), routeBase).href;
-  });
+  resolveLinks(nextMain, routeBase);
   currentMain.replaceWith(nextMain);
   if (nextFooter && currentFooter) currentFooter.replaceWith(nextFooter);
+  resolveLinks(document.querySelector(".site-header"), routeBase);
 
   hydratePage();
 
