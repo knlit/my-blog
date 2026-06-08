@@ -12,6 +12,7 @@
 
 :root {
   --bg: #101820;
+  --bg-rgb: 16, 24, 32;
   --surface: #172531;
   --surface-strong: #203342;
   --text: #f8f4dc;
@@ -26,6 +27,7 @@
 
 body.light-theme {
   --bg: #f8f4dc;
+  --bg-rgb: 248, 244, 220;
   --surface: #fff9c7;
   --surface-strong: #e8f7ef;
   --text: #172531;
@@ -53,7 +55,7 @@ body {
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    var(--bg);
+    rgba(var(--bg-rgb), 0.28);
   background-size: 24px 24px;
   color: var(--text);
   font-family: "Silver Pixel", "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
@@ -83,7 +85,7 @@ body::before {
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    var(--bg);
+    linear-gradient(rgba(var(--bg-rgb), 0.56), rgba(var(--bg-rgb), 0.2));
   background-size: 24px 24px;
 }
 
