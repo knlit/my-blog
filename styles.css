@@ -228,6 +228,11 @@ input {
   image-rendering: pixelated;
 }
 
+.sub-page .social-dock,
+.contact-page .social-dock {
+  display: none;
+}
+
 main {
   width: min(1120px, calc(100% - 28px));
   margin: 0 auto;
