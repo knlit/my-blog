@@ -75,15 +75,7 @@ body {
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 30;
-  width: 100%;
-  height: 220px;
-  background: transparent;
+  content: none;
 }
 
 body::selection {
@@ -115,18 +107,15 @@ input {
 }
 
 .site-header {
-  position: fixed;
-  top: 0;
-  left: 50%;
+  position: relative;
   z-index: 45;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   width: min(1120px, calc(100% - 28px));
-  margin: 0;
-  padding: 18px 0;
-  transform: translateX(-50%);
+  margin: 0 auto;
+  padding: 18px 0 0;
 }
 
 .brand,
@@ -251,20 +240,12 @@ main {
   z-index: 1;
   width: min(1120px, calc(100% - 28px));
   margin: 0 auto;
-  padding-top: 220px;
-}
-
-.contact-page::before {
-  height: 118px;
+  padding-top: 64px;
 }
 
 .contact-page main,
 .sub-page main {
-  padding-top: 150px;
-}
-
-.sub-page::before {
-  height: 118px;
+  padding-top: 56px;
 }
 
 .hero {
@@ -750,18 +731,15 @@ h2 {
 }
 
 .music-player {
-  position: fixed;
-  top: 104px;
-  left: 50%;
+  position: relative;
   z-index: 40;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto minmax(180px, 260px);
   gap: 16px;
   align-items: center;
   width: min(1120px, calc(100% - 36px));
-  margin: 0;
+  margin: 32px auto 0;
   padding: 14px;
-  transform: translateX(-50%);
 }
 
 .music-player[hidden] {
@@ -900,10 +878,10 @@ h2 {
   }
 
   .music-player {
-    top: 156px;
     grid-template-columns: auto minmax(0, 1fr);
     gap: 10px;
     width: min(1120px, calc(100% - 28px));
+    margin-top: 18px;
     padding: 10px;
   }
 
@@ -942,17 +920,12 @@ h2 {
   }
 
   main {
-    padding-top: 332px;
-  }
-
-  .contact-page::before,
-  .sub-page::before {
-    height: 208px;
+    padding-top: 48px;
   }
 
   .contact-page main,
   .sub-page main {
-    padding-top: 240px;
+    padding-top: 42px;
   }
 
   .contact-grid {
