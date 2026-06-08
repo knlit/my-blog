@@ -41,11 +41,13 @@ body.light-theme {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
@@ -254,6 +256,10 @@ main {
   padding: 54px 0;
 }
 
+.hero-copy {
+  min-width: 0;
+}
+
 .eyebrow {
   margin: 0 0 12px;
   color: var(--accent);
@@ -296,6 +302,7 @@ h2 {
 
 .post-marquee {
   overflow: hidden;
+  width: 100%;
   max-width: 720px;
   margin-bottom: 28px;
   border: var(--pixel) solid var(--line);
@@ -834,13 +841,12 @@ h2 {
 
 @media (max-width: 900px) {
   body::before {
-    height: 390px;
+    height: 332px;
   }
 
   .site-header,
   .section-heading,
-  .newsletter,
-  .music-player {
+  .newsletter {
     grid-template-columns: 1fr;
   }
 
@@ -873,16 +879,46 @@ h2 {
 
   .music-player {
     top: 156px;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
     width: min(1120px, calc(100% - 28px));
+    padding: 10px;
   }
 
   .record-badge {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .record-badge img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .track-label {
+    margin-bottom: 6px;
+  }
+
+  .player-controls {
+    grid-column: 1 / 2;
+  }
+
+  .player-button {
+    min-width: 42px;
+    min-height: 40px;
+  }
+
+  .volume-control {
+    grid-column: 2 / 3;
+    min-width: 0;
+  }
+
+  .volume-control input {
+    min-width: 0;
   }
 
   main {
-    padding-top: 390px;
+    padding-top: 332px;
   }
 
   .contact-page::before,
@@ -900,18 +936,20 @@ h2 {
   }
 
   .social-dock {
-    left: 14px;
-    bottom: 14px;
+    left: 50%;
+    bottom: 10px;
+    grid-auto-flow: column;
+    transform: translateX(-50%);
   }
 
   .social-dock a {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .social-dock img {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
 }
 
