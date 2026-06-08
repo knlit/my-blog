@@ -21,7 +21,7 @@
   --accent: #6fffe9;
   --accent-2: #ffcf56;
   --accent-3: #ff6b9a;
-  --video-opacity: 0.52;
+  --video-opacity: 1;
   --pixel: 4px;
 }
 
@@ -36,7 +36,7 @@ body.light-theme {
   --accent: #007c89;
   --accent-2: #a05c00;
   --accent-3: #ff7caf;
-  --video-opacity: 0.68;
+  --video-opacity: 1;
 }
 
 * {
