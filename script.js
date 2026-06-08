@@ -48,14 +48,14 @@ const posts = [
 ];
 
 const tracks = [
-  { name: "8-bit 《稻香》", src: "assets/audio/daoxiang-8bit.wav" },
-  { name: "8-bit 《七里香》", src: "assets/audio/qilixiang-8bit.wav" },
-  { name: "8-bit 《晴天》", src: "assets/audio/qingtian-8bit.wav" },
-  { name: "8-bit 《Super Star》", src: "assets/audio/super-star-8bit.wav" },
-  { name: "8-bit 《宝可梦-未白镇》", src: "assets/audio/pokemon-weibai-town-8bit.wav" },
-  { name: "8-bit 《海阔天空》", src: "assets/audio/haikuotiankong-8bit.wav" },
-  { name: "8-bit 《开心超人》", src: "assets/audio/kaixinchaoren-8bit.wav" },
-  { name: "8-bit 《突然的自我》", src: "assets/audio/turandezhiwo-8bit.wav" },
+  { name: "8-bit 《稻香》", src: "assets/audio/daoxiang-8bit.mp3" },
+  { name: "8-bit 《七里香》", src: "assets/audio/qilixiang-8bit.mp3" },
+  { name: "8-bit 《晴天》", src: "assets/audio/qingtian-8bit.mp3" },
+  { name: "8-bit 《Super Star》", src: "assets/audio/super-star-8bit.mp3" },
+  { name: "8-bit 《宝可梦-未白镇》", src: "assets/audio/pokemon-weibai-town-8bit.mp3" },
+  { name: "8-bit 《海阔天空》", src: "assets/audio/haikuotiankong-8bit.mp3" },
+  { name: "8-bit 《开心超人》", src: "assets/audio/kaixinchaoren-8bit.mp3" },
+  { name: "8-bit 《突然的自我》", src: "assets/audio/turandezhiwo-8bit.mp3" },
 ];
 
 const themeToggle = document.querySelector(".theme-toggle");
