@@ -235,6 +235,10 @@ input {
   display: none;
 }
 
+.article-page .site-header {
+  display: none;
+}
+
 main {
   position: relative;
   z-index: 1;
@@ -246,6 +250,10 @@ main {
 .contact-page main,
 .sub-page main {
   padding-top: 56px;
+}
+
+.article-page main {
+  padding-top: 28px;
 }
 
 .hero {
@@ -926,6 +934,10 @@ h2 {
   .contact-page main,
   .sub-page main {
     padding-top: 42px;
+  }
+
+  .article-page main {
+    padding-top: 20px;
   }
 
   .contact-grid {
