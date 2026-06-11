@@ -23,6 +23,7 @@
   --accent-3: #ff6b9a;
   --video-opacity: 1;
   --pixel: 4px;
+  --cursor-default: url("assets/icons/cursor.png") 0 0, auto;
 }
 
 body.light-theme {
@@ -58,6 +59,7 @@ body {
     rgba(var(--bg-rgb), 0.28);
   background-size: 24px 24px;
   color: var(--text);
+  cursor: var(--cursor-default);
   font-family: "Silver Pixel", "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
   line-height: 1.6;
 }
@@ -85,11 +87,13 @@ body::selection {
 
 a {
   color: inherit;
+  cursor: var(--cursor-default);
   text-decoration: none;
 }
 
 button,
 input {
+  cursor: var(--cursor-default);
   font: inherit;
 }
 
@@ -189,7 +193,7 @@ input {
   padding: 0;
   border: 0;
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-default);
 }
 
 .theme-toggle img {
@@ -372,7 +376,7 @@ h2 {
   min-height: 48px;
   padding: 0 18px;
   color: var(--text);
-  cursor: pointer;
+  cursor: var(--cursor-default);
   font-weight: 800;
 }
 
@@ -756,7 +760,7 @@ h2 {
 .subscribe-form button {
   background: var(--accent);
   color: var(--bg);
-  cursor: pointer;
+  cursor: var(--cursor-default);
   font-weight: 800;
 }
 
@@ -824,7 +828,7 @@ h2 {
   border: var(--pixel) solid var(--line);
   background: var(--surface-strong);
   color: var(--text);
-  cursor: pointer;
+  cursor: var(--cursor-default);
   font-weight: 800;
 }
 
