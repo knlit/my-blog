@@ -662,6 +662,11 @@ h2 {
   margin-bottom: 74px;
 }
 
+.topic-article-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  margin-bottom: 74px;
+}
+
 .article-shell {
   max-width: 860px;
   margin: 0 auto 74px;
