@@ -10,15 +10,6 @@ const posts = [
     featured: true,
   },
   {
-    title: "好工具为什么总是让人少想一步",
-    category: "产品观察",
-    date: "2026.05.24",
-    datetime: "2026-05-24",
-    excerpt: "界面、默认值和反馈如何替用户减轻认知负担。",
-    tags: ["产品", "体验", "效率"],
-    url: "posts/tool-thinking.html",
-  },
-  {
     title: "读《纳瓦尔宝典》：复利不是口号",
     category: "阅读笔记",
     date: "2026.05.12",
