@@ -599,17 +599,29 @@ h2 {
   margin-bottom: 18px;
 }
 
+.contact-hero .hero-text {
+  max-width: 760px;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+}
+
 .profile-card {
-  width: min(720px, 100%);
-  margin-top: 28px;
+  width: 100%;
+  margin: 34px auto 0;
   border: var(--pixel) solid var(--line);
   background: var(--surface);
-  padding: 22px;
+  padding: clamp(24px, 3vw, 38px);
 }
 
 .profile-card h2 {
-  margin-bottom: 12px;
-  font-size: 1.7rem;
+  margin-bottom: 16px;
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.profile-card p:not(.eyebrow) {
+  max-width: 980px;
+  color: var(--text);
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  line-height: 1.9;
 }
 
 .profile-card p:last-child {
