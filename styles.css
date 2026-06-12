@@ -435,7 +435,7 @@ h2 {
 
 .section {
   padding: 58px 0;
-  scroll-margin-top: 240px;
+  scroll-margin-top: 0;
 }
 
 .section-heading {

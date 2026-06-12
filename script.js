@@ -71,7 +71,7 @@ const themeVideos = {
 let trackIndex = 0;
 let isPlaying = false;
 let audioElement;
-let autoplayRequested = true;
+let autoplayRequested = false;
 let themeVideoElement;
 
 function applyTheme(theme) {
@@ -298,8 +298,6 @@ if (themeToggle) {
 
 if (toggleButton) {
   toggleButton.addEventListener("click", () => {
-    autoplayRequested = false;
-    removeAutoplayUnlockListeners();
     if (isPlaying) {
       stopPlayer();
     } else {
@@ -334,6 +332,26 @@ function normalizeInternalUrl(url) {
     return new URL(`index.html${url.hash}`, url);
   }
   return url;
+}
+
+function scrollToArticleListEnd() {
+  const maxScroll = Math.max(
+    0,
+    document.documentElement.scrollHeight - window.innerHeight,
+    document.body.scrollHeight - window.innerHeight
+  );
+  window.scrollTo({ top: maxScroll, behavior: "auto" });
+}
+
+function scrollToTargetHash(hash) {
+  if (hash === "#articles") {
+    requestAnimationFrame(scrollToArticleListEnd);
+    window.setTimeout(scrollToArticleListEnd, 120);
+    window.setTimeout(scrollToArticleListEnd, 450);
+    return;
+  }
+
+  document.querySelector(hash)?.scrollIntoView();
 }
 
 function syncPageShell(doc) {
@@ -389,7 +407,7 @@ async function visitPage(url, shouldPushState = true) {
   }
 
   if (targetUrl.hash) {
-    document.querySelector(targetUrl.hash)?.scrollIntoView();
+    scrollToTargetHash(targetUrl.hash);
   } else {
     window.scrollTo({ top: 0 });
   }
@@ -401,7 +419,13 @@ document.addEventListener("click", (event) => {
 
   const url = new URL(link.href);
   if (!isSameSitePage(url)) return;
-  if (normalizeInternalUrl(url).pathname === normalizeInternalUrl(new URL(window.location.href)).pathname && url.hash) return;
+  if (normalizeInternalUrl(url).pathname === normalizeInternalUrl(new URL(window.location.href)).pathname && url.hash) {
+    if (url.hash !== "#articles") return;
+    event.preventDefault();
+    history.pushState({ path: url.href }, "", url.href);
+    scrollToTargetHash(url.hash);
+    return;
+  }
 
   event.preventDefault();
   visitPage(url).catch(() => {
@@ -415,23 +439,6 @@ window.addEventListener("popstate", () => {
   });
 });
 
-function removeAutoplayUnlockListeners() {
-  for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
-    document.removeEventListener(eventName, unlockAutoplayOnFirstInteraction);
-  }
-}
-
-function unlockAutoplayOnFirstInteraction(event) {
-  if (!autoplayRequested || isPlaying) return;
-  if (event.target.closest?.(".music-player")) return;
-  startPlayer();
-  removeAutoplayUnlockListeners();
-}
-
-for (const eventName of ["pointerdown", "keydown", "touchstart"]) {
-  document.addEventListener(eventName, unlockAutoplayOnFirstInteraction, { passive: true });
-}
-
 mobileBackgroundQuery.addEventListener("change", () => {
   const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
   updateThemeVideo(theme);
@@ -440,5 +447,7 @@ mobileBackgroundQuery.addEventListener("change", () => {
 applyTheme(localStorage.getItem("blog-theme") || "dark");
 if (trackName) trackName.textContent = tracks[trackIndex].name;
 loadTrack();
-startPlayer();
 hydratePage();
+if (window.location.hash === "#articles") {
+  scrollToTargetHash(window.location.hash);
+}
