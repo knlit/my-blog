@@ -4,12 +4,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Monica Pixel";
-  src: url("assets/fonts/monica-pixel-rounded.otf") format("opentype");
-  font-display: swap;
-}
-
 :root {
   --bg: #101820;
   --bg-rgb: 16, 24, 32;
@@ -62,7 +56,7 @@ body {
   background-size: 24px 24px;
   color: var(--text);
   cursor: var(--cursor-default);
-  font-family: "Silver Pixel", "Monica Pixel", "Courier New", "Microsoft YaHei", monospace;
+  font-family: "Silver Pixel", "Courier New", "Microsoft YaHei", monospace;
   line-height: 1.6;
 }
 
