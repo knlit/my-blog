@@ -77,7 +77,7 @@ let themeVideoElement;
 function applyTheme(theme) {
   const isLight = theme === "light";
   document.body.classList.toggle("light-theme", isLight);
-  updateThemeVideo(isLight ? "light" : "dark");
+  scheduleThemeVideo(isLight ? "light" : "dark");
 
   if (!themeToggle) return;
 
@@ -117,6 +117,19 @@ function updateThemeVideo(theme) {
     video.load();
   }
   video.play().catch(() => {});
+}
+
+function scheduleThemeVideo(theme) {
+  const loadVideo = () => {
+    const currentTheme = document.body.classList.contains("light-theme") ? "light" : theme;
+    updateThemeVideo(currentTheme);
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(loadVideo, { timeout: 800 });
+  } else {
+    window.setTimeout(loadVideo, 120);
+  }
 }
 
 function renderPosts(query = "") {
@@ -183,7 +196,7 @@ function ensureAudio() {
   if (audioElement) return audioElement;
 
   audioElement = new Audio(tracks[trackIndex].src);
-  audioElement.preload = "metadata";
+  audioElement.preload = "none";
   audioElement.volume = Number(volumeControl.value) / 100;
   audioElement.addEventListener("ended", () => changeTrack(1, true));
   return audioElement;
@@ -471,7 +484,6 @@ mobileBackgroundQuery.addEventListener("change", () => {
 
 applyTheme(localStorage.getItem("blog-theme") || "dark");
 if (trackName) trackName.textContent = tracks[trackIndex].name;
-loadTrack();
 hydratePage();
 if (window.location.hash === "#articles") {
   scrollToTargetHash(window.location.hash);
