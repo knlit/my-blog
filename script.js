@@ -245,6 +245,30 @@ function changeTrack(direction, shouldAutoplay = false) {
   if (wasPlaying) startPlayer();
 }
 
+function hydratePortfolioFilters() {
+  const portfolioGrid = document.querySelector("#portfolioGrid");
+  const filterButtons = document.querySelectorAll("[data-portfolio-filter]");
+  if (!portfolioGrid || !filterButtons.length) return;
+
+  const cards = portfolioGrid.querySelectorAll("[data-portfolio-tags]");
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.portfolioFilter;
+
+      filterButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+
+      cards.forEach((card) => {
+        const tags = card.dataset.portfolioTags.split(",");
+        card.hidden = filter !== "all" && !tags.includes(filter);
+      });
+    });
+  });
+}
+
 function hydratePage() {
   const searchInput = document.querySelector("#postSearch");
   const topicLinks = document.querySelectorAll("[data-topic]");
@@ -286,6 +310,7 @@ function hydratePage() {
 
   renderLatestPostsMarquee();
   renderPosts();
+  hydratePortfolioFilters();
 }
 
 if (themeToggle) {
